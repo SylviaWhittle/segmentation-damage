@@ -1,0 +1,36 @@
+schema: '2.0'
+stages:
+  data_split:
+    cmd: python src/data_split.py
+    deps:
+    - path: data/all_data/
+      hash: md5
+      md5: a51d400692d79e677923d38ef89bb331.dir
+      size: 88985110
+      nfiles: 224
+    - path: src/data_split.py
+      hash: md5
+      md5: 92cbc3ea6a0740e559466a998e11ba99
+      size: 3506
+    params:
+      params.yaml:
+        base:
+          random_seed: 0
+          model_image_size: 512
+          loss_function: categorical_crossentropy
+        data_split:
+          test_split: 0.2
+          data_dir: data/all_data/
+          train_data_dir: data/train/
+          test_data_dir: data/test/
+    outs:
+    - path: data/test
+      hash: md5
+      md5: 8ef8bd4b1261404e9b7bbe1f624329fe.dir
+      size: 19089349
+      nfiles: 48
+    - path: data/train
+      hash: md5
+      md5: d9a75b24e2276c72ef773854cfd7e75c.dir
+      size: 69895761
+      nfiles: 176
