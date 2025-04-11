@@ -3,6 +3,8 @@ base:
   model_image_size: 512
   # Loss needs to be here since both train and evaluate need it
   loss_function: categorical_crossentropy # Options: binary_crossentropy, iou_loss, dice_loss
+  image_channels: 1
+  output_classes: 2
 data_split:
   test_split: 0.2
   data_dir: data/all_data/
@@ -20,7 +22,7 @@ train:
   norm_lower_bound: -1
   validation_split: 0.2
 evaluate:
-  model_path: models/dna-damage.keras
+  model_path: models/dna-damage-model.keras
   test_data_dir: data/test/
 
 
