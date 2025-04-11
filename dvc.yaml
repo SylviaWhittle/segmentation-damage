@@ -20,13 +20,13 @@ stages:
     - base
     - train
     outs:
-    - models/catsnet_model.keras
+    - models/dna-damage-model.keras
     - results/train/
   evaluate:
     cmd: python src/evaluate.py
     deps:
     - data/test/
-    - models/catsnet_model.keras
+    - models/dna-damage-model.keras
     - src/evaluate.py
     - src/unet.py
     params:
@@ -35,12 +35,15 @@ stages:
     outs:
     - results/evaluate/
 metrics:
+- results/train/metrics.json
 - results/evaluate/metrics.json
 plots:
+- results/train/plots/metrics:
+    x: step
 - results/evaluate/plots/images
 artifacts:
-  catsnet_model:
-    path: models/catsnet_model.keras
+  dna-damage-model:
+    path: models/dna-damage-model.keras
     type: model
     desc: Model trained to segment cats.
     labels:
