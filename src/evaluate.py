@@ -114,10 +114,11 @@ def evaluate(
                 ax[2].imshow(mask_predicted[:, :, 0], cmap="binary")
                 ax[2].set_title("Predicted Mask")
             else:
+                logger.info(f"Number of channels: {num_channels}")
                 for i in range(num_channels):
-                    ax[i, 0].imshow(image[:, :, i], cmap="viridis")
+                    ax[i, 0].imshow(image[:, :, 0], cmap="viridis")
                     ax[i, 0].set_title("Image")
-                    ax[i, 1].imshow(mask[:, :, i], cmap="binary")
+                    ax[i, 1].imshow(mask[:, :, 0], cmap="binary")
                     ax[i, 1].set_title(f"Ground Truth Mask Channel {i}")
                     ax[i, 2].imshow(mask_predicted[:, :, i], cmap="binary")
                     ax[i, 2].set_title(f"Predicted Mask Channel {i}")
@@ -148,6 +149,8 @@ if __name__ == "__main__":
     elif loss_function == "iou_loss":
         custom_objects["iou_loss"] = iou_loss
     elif loss_function == "binary_crossentropy":
+        pass
+    elif loss_function == "categorical_crossentropy":
         pass
     else:
         raise ValueError(f"Invalid loss function: {loss_function}")

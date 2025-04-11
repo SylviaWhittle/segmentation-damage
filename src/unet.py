@@ -73,17 +73,19 @@ def iou_loss(y_true, y_pred, smooth=1e-5):
     return iou
 
 
-def unet_model(image_height, image_width, image_channels, learning_rate, conv_activation_function, final_activation_function, loss_function):
+def unet_model(image_height, image_width, image_channels, output_classes, learning_rate, conv_activation_function, final_activation_function, loss_function):
     """U-NET model definition function.
 
     Parameters
     ----------
-    IMG_HEIGHT : int
+    image_height : int
         Image height.
-    IMG_WIDTH : int
+    image_width : int
         Image width.
-    IMG_CHANNELS : int
+    image_channels : int
         Number of image channels.
+    output_classes : int
+        Number of output classes.
     learning_rate : float
         Learning rate for the Adam optimizer.
     conv_activation_function : str
@@ -196,7 +198,7 @@ def unet_model(image_height, image_width, image_channels, learning_rate, conv_ac
     )(conv9)
 
     # Make predictions of classes based on the culminated data
-    outputs = Conv2D(1, kernel_size=(1, 1), activation=final_activation_function)(conv9)
+    outputs = Conv2D(output_classes, kernel_size=(1, 1), activation=final_activation_function)(conv9)
 
     model = Model(inputs=[inputs], outputs=[outputs])
     # custom learning rate

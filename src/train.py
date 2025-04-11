@@ -24,6 +24,8 @@ def image_data_generator(
     image_indexes: np.ndarray,
     batch_size: int,
     model_image_size: Tuple[int, int],
+    image_channels: int,
+    output_classes: int,
     norm_upper_bound: float,
     norm_lower_bound: float,
 ):
@@ -61,14 +63,22 @@ def image_data_generator(
 
             # Add the image and ground truth to the batch
             batch_input.append(image)
-            batch_output.append(ground_truth)
+            if output_classes > 1:
+                categorical_ground_truth = np.zeros(shape=(model_image_size[0], model_image_size[1], output_classes))
+                # print(f"Ground truth shape: {ground_truth.shape}")
+                # print(f"Categorical ground truth shape: {categorical_ground_truth.shape}")
+                for i in range(output_classes):
+                    # print(i)
+                    categorical_ground_truth[:, :, i] = np.where(ground_truth==i, 1, 0)
+                batch_output.append(categorical_ground_truth)
+            else:
+                batch_output.append(ground_truth)
 
         # Convert the lists to numpy arrays
         batch_x = np.array(batch_input).astype(np.float32)
         batch_y = np.array(batch_output).astype(np.float32)
-
-        # logger.info(f"Batch x shape: {batch_x.shape}")
-        # logger.info(f"Batch y shape: {batch_y.shape}")
+        # logger.info(f"Batch x shape: {batch_x.shape} image channels: {image_channels}")
+        # logger.info(f"Batch y shape: {batch_y.shape} output classes: {output_classes}")
 
         yield (batch_x, batch_y)
 
@@ -78,6 +88,8 @@ def train_model(
     train_data_dir: Path,
     model_save_dir: Path,
     model_image_size: Tuple[int, int],
+    image_channels: int,
+    output_classes: int,
     conv_activation_function: str,
     final_activation_function: str,
     learning_rate: float,
@@ -134,6 +146,8 @@ def train_model(
         image_indexes=train_indexes,
         batch_size=batch_size,
         model_image_size=model_image_size,
+        image_channels=image_channels,
+        output_classes=output_classes,
         norm_upper_bound=norm_upper_bound,
         norm_lower_bound=norm_lower_bound,
     )
@@ -143,6 +157,8 @@ def train_model(
         image_indexes=validation_indexes,
         batch_size=batch_size,
         model_image_size=model_image_size,
+        image_channels=image_channels,
+        output_classes=output_classes,
         norm_upper_bound=norm_upper_bound,
         norm_lower_bound=norm_lower_bound,
     )
@@ -152,7 +168,8 @@ def train_model(
     model = unet_model(
         image_height=model_image_size[0],
         image_width=model_image_size[1],
-        image_channels=2,
+        image_channels=image_channels,
+        output_classes=output_classes,
         learning_rate=learning_rate,
         conv_activation_function=conv_activation_function,
         final_activation_function=final_activation_function,
@@ -180,11 +197,12 @@ def train_model(
         logger.info("Training: Finished training.")
 
         logger.info(f"Training: Saving model to {model_save_dir}")
-        model.save(Path(model_save_dir) / "catsnet_model.keras")
+        model_save_dir.mkdir(parents=True, exist_ok=True)
+        model.save(Path(model_save_dir) / "dna-damage-model.keras")
         live.log_artifact(
-            str(Path(model_save_dir) / "catsnet_model.keras"),
+            str(Path(model_save_dir) / "dna-damage-model.keras"),
             type="model",
-            name="catsnet_model",
+            name="dna-damage-model",
             desc="Model trained to segment cats.",
             labels=["cv", "segmentation"],
         )
@@ -226,6 +244,8 @@ if __name__ == "__main__":
         train_data_dir=train_data_dir,
         model_save_dir=model_save_dir,
         model_image_size=(base_params["model_image_size"], base_params["model_image_size"]),
+        image_channels=base_params["image_channels"],
+        output_classes=base_params["output_classes"],
         conv_activation_function=train_params["conv_activation_function"],
         final_activation_function=train_params["final_activation_function"],
         learning_rate=train_params["learning_rate"],
