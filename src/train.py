@@ -227,6 +227,7 @@ if __name__ == "__main__":
         model_save_dir=model_save_dir,
         model_image_size=(base_params["model_image_size"], base_params["model_image_size"]),
         conv_activation_function=train_params["conv_activation_function"],
+        final_activation_function=train_params["final_activation_function"],
         learning_rate=train_params["learning_rate"],
         batch_size=train_params["batch_size"],
         epochs=train_params["epochs"],

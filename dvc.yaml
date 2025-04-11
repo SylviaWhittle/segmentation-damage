@@ -35,11 +35,8 @@ stages:
     outs:
     - results/evaluate/
 metrics:
-- results/train/metrics.json
 - results/evaluate/metrics.json
 plots:
-- results/train/plots/metrics:
-    x: step
 - results/evaluate/plots/images
 artifacts:
   catsnet_model:
