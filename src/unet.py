@@ -73,7 +73,16 @@ def iou_loss(y_true, y_pred, smooth=1e-5):
     return iou
 
 
-def unet_model(image_height, image_width, image_channels, output_classes, learning_rate, conv_activation_function, final_activation_function, loss_function):
+def unet_model(
+    image_height,
+    image_width,
+    image_channels,
+    output_classes,
+    learning_rate,
+    conv_activation_function,
+    final_activation_function,
+    loss_function,
+):
     """U-NET model definition function.
 
     Parameters
@@ -206,7 +215,8 @@ def unet_model(image_height, image_width, image_channels, output_classes, learni
 
     # Loss function
     if loss_function == "dice_loss":
-        loss = dice_loss
+        # loss = dice_loss
+        loss = tf.keras.losses.Dice(reduction="sum_over_batch_size", name="dice")
     elif loss_function == "iou_loss":
         loss = iou_loss
     elif loss_function == "binary_crossentropy":
