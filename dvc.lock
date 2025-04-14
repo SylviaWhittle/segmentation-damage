@@ -17,7 +17,7 @@ stages:
         base:
           random_seed: 0
           model_image_size: 512
-          loss_function: categorical_crossentropy
+          loss_function: dice_loss
           image_channels: 1
           output_classes: 2
         data_split:
@@ -46,24 +46,24 @@ stages:
       nfiles: 176
     - path: src/train.py
       hash: md5
-      md5: de62a882cbfaa9b2d5831473b09226ef
-      size: 9783
+      md5: ed3b692d7aec1a93a56f1836ae7a0f76
+      size: 9791
     - path: src/unet.py
       hash: md5
-      md5: 43103416f86727d10d391bde6a92b4ff
-      size: 8195
+      md5: 2ba1fb39428adaf94985a85d02ad7e82
+      size: 8314
     params:
       params.yaml:
         base:
           random_seed: 0
           model_image_size: 512
-          loss_function: categorical_crossentropy
+          loss_function: dice_loss
           image_channels: 1
           output_classes: 2
         train:
           train_data_dir: data/train/
           model_save_dir: models/
-          batch_size: 1
+          batch_size: 2
           epochs: 5
           conv_activation_function: relu
           final_activation_function: softmax
@@ -74,12 +74,12 @@ stages:
     outs:
     - path: models/dna-damage-model.keras
       hash: md5
-      md5: dd739b5a1442eda74c2982566b6d05f1
-      size: 23468176
+      md5: 976d7f0e7ca13ca6d3f2d0831a86c211
+      size: 23468340
     - path: results/train/
       hash: md5
-      md5: 935f22040b120818e7f1c6a9dc4bc9d5.dir
-      size: 688
+      md5: 6ad4c425eea0151b3e345630cbd84314.dir
+      size: 598
       nfiles: 5
   evaluate:
     cmd: python src/evaluate.py
@@ -91,22 +91,22 @@ stages:
       nfiles: 48
     - path: models/dna-damage-model.keras
       hash: md5
-      md5: dd739b5a1442eda74c2982566b6d05f1
-      size: 23468176
+      md5: 976d7f0e7ca13ca6d3f2d0831a86c211
+      size: 23468340
     - path: src/evaluate.py
       hash: md5
       md5: f6b1a7ca6029ba656399831892aac57e
       size: 6411
     - path: src/unet.py
       hash: md5
-      md5: 43103416f86727d10d391bde6a92b4ff
-      size: 8195
+      md5: 2ba1fb39428adaf94985a85d02ad7e82
+      size: 8314
     params:
       params.yaml:
         base:
           random_seed: 0
           model_image_size: 512
-          loss_function: categorical_crossentropy
+          loss_function: dice_loss
           image_channels: 1
           output_classes: 2
         evaluate:
@@ -115,6 +115,6 @@ stages:
     outs:
     - path: results/evaluate/
       hash: md5
-      md5: 6192a13bac6395787d428ac360442425.dir
-      size: 2072442
+      md5: bdc0223e21760955f3780c5813266eff.dir
+      size: 1916617
       nfiles: 13
