@@ -5,7 +5,7 @@ stages:
     deps:
     - path: data/all_data/
       hash: md5
-      md5: a51d400692d79e677923d38ef89bb331.dir
+      md5: aeb80fd6d5a557e3a747678005b348a9.dir
       size: 88985110
       nfiles: 224
     - path: src/data_split.py
@@ -28,21 +28,21 @@ stages:
     outs:
     - path: data/test
       hash: md5
-      md5: 8ef8bd4b1261404e9b7bbe1f624329fe.dir
-      size: 19089349
-      nfiles: 48
+      md5: ba1ad641e789aae4c6a33baf49d9874a.dir
+      size: 17491726
+      nfiles: 44
     - path: data/train
       hash: md5
-      md5: d9a75b24e2276c72ef773854cfd7e75c.dir
-      size: 69895761
+      md5: 813d988f50563b76108aee71c6dd029f.dir
+      size: 69891067
       nfiles: 176
   train:
     cmd: python src/train.py
     deps:
     - path: data/train/
       hash: md5
-      md5: d9a75b24e2276c72ef773854cfd7e75c.dir
-      size: 69895761
+      md5: 813d988f50563b76108aee71c6dd029f.dir
+      size: 69891067
       nfiles: 176
     - path: src/train.py
       hash: md5
@@ -64,34 +64,34 @@ stages:
           train_data_dir: data/train/
           model_save_dir: models/
           batch_size: 2
-          epochs: 5
+          epochs: 40
           conv_activation_function: relu
           final_activation_function: softmax
-          learning_rate: 0.001
+          learning_rate: 0.0001
           norm_upper_bound: 7
           norm_lower_bound: -1
           validation_split: 0.2
     outs:
     - path: models/dna-damage-model.keras
       hash: md5
-      md5: 976d7f0e7ca13ca6d3f2d0831a86c211
+      md5: 5f1bd1d180f3a5aab6d3bdddfbc1e889
       size: 23468340
     - path: results/train/
       hash: md5
-      md5: 6ad4c425eea0151b3e345630cbd84314.dir
-      size: 598
+      md5: c608a45bc561d30222ce44e3c34306b9.dir
+      size: 3153
       nfiles: 5
   evaluate:
     cmd: python src/evaluate.py
     deps:
     - path: data/test/
       hash: md5
-      md5: 8ef8bd4b1261404e9b7bbe1f624329fe.dir
-      size: 19089349
-      nfiles: 48
+      md5: ba1ad641e789aae4c6a33baf49d9874a.dir
+      size: 17491726
+      nfiles: 44
     - path: models/dna-damage-model.keras
       hash: md5
-      md5: 976d7f0e7ca13ca6d3f2d0831a86c211
+      md5: 5f1bd1d180f3a5aab6d3bdddfbc1e889
       size: 23468340
     - path: src/evaluate.py
       hash: md5
@@ -115,6 +115,6 @@ stages:
     outs:
     - path: results/evaluate/
       hash: md5
-      md5: bdc0223e21760955f3780c5813266eff.dir
-      size: 1916617
-      nfiles: 13
+      md5: 361ff60745d9c3cd27a50fc9659a840c.dir
+      size: 1744395
+      nfiles: 12
