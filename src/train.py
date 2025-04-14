@@ -41,7 +41,7 @@ def image_data_generator(
         for index in batch_indexes:
             # Load the image and ground truth
             image = np.load(data_dir / f"image_{index}.npy")
-            ground_truth = np.load(data_dir / f"mask_{index}.npy").astype(bool)
+            ground_truth = np.load(data_dir / f"mask_{index}.npy").astype(np.uint8)
 
             # TODO: Augment the images: Scale and translate
 
@@ -67,11 +67,17 @@ def image_data_generator(
                 categorical_ground_truth = np.zeros(shape=(model_image_size[0], model_image_size[1], output_classes))
                 # print(f"Ground truth shape: {ground_truth.shape}")
                 # print(f"Categorical ground truth shape: {categorical_ground_truth.shape}")
+                logger.info(
+                    f"Ground truth unique values: {np.unique(ground_truth)}, counts: {np.bincount(ground_truth.flatten())}"
+                )
                 for i in range(output_classes):
                     # print(i)
                     categorical_ground_truth[:, :, i] = np.where(ground_truth == (i + 1), 1, 0)
                 batch_output.append(categorical_ground_truth)
             else:
+                # logger.info(f"unique values in ground truth: {np.unique(ground_truth)}")
+                # logger.info(f"Ground truth max value: {np.max(ground_truth)} grabbing value 2 only")
+                # ground_truth = np.where(ground_truth == 2, 1, 0)
                 batch_output.append(ground_truth)
 
         # Convert the lists to numpy arrays
