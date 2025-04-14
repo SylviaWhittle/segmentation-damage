@@ -69,7 +69,7 @@ def image_data_generator(
                 # print(f"Categorical ground truth shape: {categorical_ground_truth.shape}")
                 for i in range(output_classes):
                     # print(i)
-                    categorical_ground_truth[:, :, i] = np.where(ground_truth==i, 1, 0)
+                    categorical_ground_truth[:, :, i] = np.where(ground_truth == (i + 1), 1, 0)
                 batch_output.append(categorical_ground_truth)
             else:
                 batch_output.append(ground_truth)
