@@ -1,10 +1,10 @@
 base:
   random_seed: 0
-  model_image_size: 512
+  model_image_size: 256
   # Loss needs to be here since both train and evaluate need it
   loss_function: dice_loss # Options: binary_crossentropy, iou_loss, dice_loss
   image_channels: 1
-  output_classes: 2
+  output_classes: 1
 data_split:
   test_split: 0.2
   data_dir: data/all_data/
@@ -13,11 +13,11 @@ data_split:
 train:
   train_data_dir: data/train/
   model_save_dir: models/
-  batch_size: 2
-  epochs: 40
+  batch_size: 9
+  epochs: 15
   conv_activation_function: relu # Options: relu, sigmoid
-  final_activation_function: softmax # Options: softmax (for multi-class), sigmoid (for binary)
-  learning_rate: 0.0001
+  final_activation_function: sigmoid # Options: softmax (for multi-class), sigmoid (for binary)
+  learning_rate: 1e-03
   norm_upper_bound: 7
   norm_lower_bound: -1
   validation_split: 0.2

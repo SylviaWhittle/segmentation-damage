@@ -15,6 +15,7 @@ from keras.layers import (
     Lambda,
 )
 import tensorflow as tf
+import numpy as np
 
 
 # DICE Loss
@@ -216,7 +217,8 @@ def unet_model(
     # Loss function
     if loss_function == "dice_loss":
         # loss = dice_loss
-        loss = tf.keras.losses.Dice(reduction="sum_over_batch_size", name="dice")
+        # loss = tf.keras.losses.Dice(reduction="sum_over_batch_size", name="dice")
+        loss = dice_loss
     elif loss_function == "iou_loss":
         loss = iou_loss
     elif loss_function == "binary_crossentropy":

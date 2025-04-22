@@ -33,6 +33,8 @@ def image_data_generator(
 
     while True:
         # Select files for the batch
+        logger.info(f"num image indexes: {len(image_indexes)}")
+        logger.info(f"batch size: {batch_size}")
         batch_indexes = np.random.choice(a=image_indexes, size=batch_size, replace=False)
         batch_input = []
         batch_output = []
@@ -64,7 +66,9 @@ def image_data_generator(
             # Add the image and ground truth to the batch
             batch_input.append(image)
             if output_classes > 1:
-                categorical_ground_truth = np.zeros(shape=(model_image_size[0], model_image_size[1], output_classes))
+                categorical_ground_truth = np.zeros(
+                    shape=(model_image_size[0], model_image_size[1], output_classes)
+                ).astype(np.uint8)
                 # print(f"Ground truth shape: {ground_truth.shape}")
                 # print(f"Categorical ground truth shape: {categorical_ground_truth.shape}")
                 logger.info(
@@ -72,17 +76,21 @@ def image_data_generator(
                 )
                 for i in range(output_classes):
                     # print(i)
-                    categorical_ground_truth[:, :, i] = np.where(ground_truth == (i + 1), 1, 0)
+                    categorical_ground_truth[:, :, i] = np.uint8(np.where(ground_truth == (i + 1), 1, 0))
+                    logger.info(f"categorical classes and counts: {i} : {np.sum(categorical_ground_truth[:, :, i])}")
                 batch_output.append(categorical_ground_truth)
             else:
                 # logger.info(f"unique values in ground truth: {np.unique(ground_truth)}")
                 # logger.info(f"Ground truth max value: {np.max(ground_truth)} grabbing value 2 only")
-                # ground_truth = np.where(ground_truth == 2, 1, 0)
+                ground_truth = np.where(ground_truth == 1, 1, 0)
                 batch_output.append(ground_truth)
 
         # Convert the lists to numpy arrays
         batch_x = np.array(batch_input).astype(np.float32)
         batch_y = np.array(batch_output).astype(np.float32)
+        # np.save("batch_x.npy", batch_x)
+        # np.save("batch_y.npy", batch_y)
+        # raise ValueError("Debugging batch_x and batch_y")
         # logger.info(f"Batch x shape: {batch_x.shape} image channels: {image_channels}")
         # logger.info(f"Batch y shape: {batch_y.shape} output classes: {output_classes}")
 
